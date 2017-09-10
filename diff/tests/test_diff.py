@@ -7,8 +7,10 @@ import diff
 
 class TestDiff(TestCase):
     def test_custom_diff(self):
-        one = object()
-        self.assertFalse(diff.diff(one, one))
+        class Something(object):
+            def __diff__(self, other):
+                return "something is not " + repr(other)
+        self.assertEqual(diff.diff(Something(), 12), "something is not 12")
 
     def test_equal_is_falsy(self):
         one = object()
