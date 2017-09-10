@@ -1,9 +1,15 @@
 from unittest import TestCase
 
+from zope.interface import verify
+
 import diff
 
 
 class TestDiff(TestCase):
+    def test_custom_diff(self):
+        one = object()
+        self.assertFalse(diff.diff(one, one))
+
     def test_equal_is_falsy(self):
         one = object()
         self.assertFalse(diff.diff(one, one))
@@ -15,3 +21,12 @@ class TestDiff(TestCase):
     def test_nonequality_is_falsy(self):
         one, two = object(), object()
         self.assertTrue(diff.NotEqual(one, two))
+
+
+class TestConstant(TestCase):
+    def test_it_has_a_constant_explanation(self):
+        difference = diff.Constant(explanation="my explanation")
+        self.assertEqual(difference.explain(), "my explanation")
+
+    def test_it_is_a_difference(self):
+        verify.verifyClass(diff.Difference, diff.Constant)
