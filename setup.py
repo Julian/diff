@@ -34,7 +34,7 @@ setup(
     setup_requires=["vcversioner>=2.16.0.0"],
     vcversioner={"version_module_paths": ["diff/_version.py"]},
 
-    install_requires=["attrs", "zope.interface"]
+    install_requires=["attrs", "zope.interface"],
 
     classifiers=classifiers,
 )
