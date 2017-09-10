@@ -8,10 +8,12 @@ class NotEqual(object):
     two = attr.ib()
 
     def __bool__(self):
-        return False
+        return True
 
     __nonzero__ = __bool__
 
 
 def diff(one, two):
-    return NotEqual(one, two)
+    if one != two:
+        return NotEqual(one, two)
+    return False
