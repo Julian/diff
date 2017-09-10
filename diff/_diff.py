@@ -44,5 +44,6 @@ def diff(one, two):
         differ = getattr(one, "__diff__", None)
         if differ is None:
             return NotEqual(one, two)
-        return differ(two)
+        difference = differ(two)
+        return Difference(difference, Constant(explanation=difference))
     return False

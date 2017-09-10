@@ -9,8 +9,16 @@ class TestDiff(TestCase):
     def test_custom_diff(self):
         class Something(object):
             def __diff__(self, other):
+                return diff.Constant(explanation="nope")
+        self.assertEqual(diff.diff(Something(), 12).explain(), "nope")
+
+    def test_coerced_diff(self):
+        class Something(object):
+            def __diff__(self, other):
                 return "something is not " + repr(other)
-        self.assertEqual(diff.diff(Something(), 12), "something is not 12")
+        self.assertEqual(
+            diff.diff(Something(), 12).explain(), "something is not 12",
+        )
 
     def test_equal_is_falsy(self):
         one = object()
