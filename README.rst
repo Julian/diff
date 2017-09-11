@@ -7,7 +7,7 @@ diff
 
 ``diff`` defines a difference protocol. Watch:
 
-.. codeblock: python
+.. code-block:: python
 
     >>> class LonelyObject(object):
     ...     def __diff__(self, other):
