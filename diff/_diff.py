@@ -25,7 +25,7 @@ class Constant(object):
 
 
 @attr.s
-class NotEqual(object):
+class _NoSpecificDiff(object):
 
     one = attr.ib()
     two = attr.ib()
@@ -40,6 +40,6 @@ def diff(one, two):
 
     differ = getattr(one, "__diff__", None)
     if differ is None:
-        return NotEqual(one, two)
+        return _NoSpecificDiff(one, two)
     difference = differ(two)
     return Difference(difference, Constant(explanation=difference))

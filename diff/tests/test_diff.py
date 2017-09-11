@@ -26,7 +26,10 @@ class TestDiff(TestCase):
 
     def test_no_specific_diff_info(self):
         one, two = object(), object()
-        self.assertEqual(diff.diff(one, two), diff.NotEqual(one, two))
+        self.assertEqual(
+            diff.diff(one, two).explain(),
+            "{!r} != {!r}".format(one, two),
+        )
 
     def test_nonequality_is_truthy(self):
         one, two = object(), object()
