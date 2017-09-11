@@ -1,7 +1,6 @@
-from unittest import TestCase
-
 from zope.interface import verify
 
+from diff.unittest import TestCase
 import diff
 
 
