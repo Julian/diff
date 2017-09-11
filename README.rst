@@ -2,8 +2,6 @@
 diff
 ====
 
-*Diff some stuff, find out why it ain't the same.*
-
 
 ``diff`` defines a difference protocol. Watch:
 
