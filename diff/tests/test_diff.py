@@ -20,17 +20,17 @@ class TestDiff(TestCase):
             diff.diff(Something(), 12).explain(), "something is not 12",
         )
 
-    def test_equal_is_falsy(self):
+    def test_equal_returns_none(self):
         one = object()
-        self.assertFalse(diff.diff(one, one))
+        self.assertIsNone(diff.diff(one, one))
 
     def test_no_specific_diff_info(self):
         one, two = object(), object()
         self.assertEqual(diff.diff(one, two), diff.NotEqual(one, two))
 
-    def test_nonequality_is_falsy(self):
+    def test_nonequality_is_truthy(self):
         one, two = object(), object()
-        self.assertTrue(diff.NotEqual(one, two))
+        self.assertTrue(diff.diff(one, two))
 
 
 class TestConstant(TestCase):
