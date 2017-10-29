@@ -8,6 +8,8 @@ class TestTestCase(diff.unittest.TestCase, TestCase):
     def assertFails(self, *args, **kwargs):
         expected = kwargs.pop("expected")
         with TestCase.assertRaises(self, self.failureException) as e:
+            self.addCleanup(setattr, self, "longMessage", self.longMessage)
+            self.longMessage = False
             self.assertEqual(*args, **kwargs)
         TestCase.assertEqual(self, str(e.exception), expected)
 
