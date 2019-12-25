@@ -1,6 +1,8 @@
+from textwrap import dedent
+from unittest import TestCase
+
 from zope.interface import verify
 
-from diff.unittest import TestCase
 import diff
 
 
@@ -17,6 +19,16 @@ class TestDiff(TestCase):
                 return "something is not " + repr(other)
         self.assertEqual(
             diff.diff(Something(), 12).explain(), "something is not 12",
+        )
+
+    def test_str(self):
+        self.assertEqual(
+            diff.diff("foo", "foobar").explain(), dedent(
+                """
+                - foo
+                + foobar
+                """,
+            ).strip("\n"),
         )
 
     def test_equal_returns_none(self):

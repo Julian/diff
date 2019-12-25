@@ -1,8 +1,10 @@
-from zope.interface import Interface, implementer
+from difflib import ndiff
+
 import attr
+import zope.interface.registry
 
 
-class Difference(Interface):
+class Difference(zope.interface.Interface):
     def explain():
         """
         Explain this difference.
@@ -14,7 +16,7 @@ class Difference(Interface):
         """
 
 
-@implementer(Difference)
+@zope.interface.implementer(Difference)
 @attr.s
 class Constant(object):
 
@@ -24,14 +26,8 @@ class Constant(object):
         return self._explanation
 
 
-@attr.s
-class _NoSpecificDiff(object):
-
-    one = attr.ib()
-    two = attr.ib()
-
-    def explain(self):
-        return "{0.one} != {0.two}".format(self)
+def _no_specific_diff(one):
+    return lambda two: Constant("{!r} != {!r}".format(one, two))
 
 
 def diff(one, two):
@@ -40,6 +36,21 @@ def diff(one, two):
 
     differ = getattr(one, "__diff__", None)
     if differ is None:
-        return _NoSpecificDiff(one, two)
+        differ = _registry.queryAdapter(one, Difference)
     difference = differ(two)
     return Difference(difference, Constant(explanation=difference))
+
+
+_registry = zope.interface.registry.Components()
+_registry.registerAdapter(
+    lambda value: lambda other: "\n".join(
+        ndiff(value.splitlines(), other.splitlines()),
+    ),
+    [str],
+    Difference,
+)
+_registry.registerAdapter(
+    _no_specific_diff,
+    [None],
+    Difference,
+)
