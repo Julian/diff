@@ -18,7 +18,7 @@ class Difference(zope.interface.Interface):
 
 @zope.interface.implementer(Difference)
 @attr.s
-class Constant(object):
+class Constant:
 
     _explanation = attr.ib()
 
@@ -27,7 +27,7 @@ class Constant(object):
 
 
 def _no_specific_diff(one):
-    return lambda two: Constant("{!r} != {!r}".format(one, two))
+    return lambda two: Constant(f"{one!r} != {two!r}")
 
 
 def diff(one, two):
