@@ -2,7 +2,7 @@
 diff
 ====
 
-|PyPI| |Pythons| |CI| |Codecov|
+|PyPI| |Pythons| |CI| |pre-commit|
 
 .. |PyPI| image:: https://img.shields.io/pypi/v/diff.svg
   :alt: PyPI version
@@ -16,16 +16,16 @@ diff
   :alt: Build status
   :target: https://github.com/Julian/diff/actions?query=workflow%3ACI
 
-.. |Codecov| image:: https://codecov.io/gh/Julian/diff/branch/master/graph/badge.svg
-  :alt: Codecov Code coverage
-  :target: https://codecov.io/gh/Julian/diff
+.. |pre-commit| image:: https://results.pre-commit.ci/badge/github/Julian/diff/main.svg
+  :alt: pre-commit.ci status
+  :target: https://results.pre-commit.ci/latest/github/Julian/diff/main
 
 
 ``diff`` defines a difference protocol. Watch:
 
 .. code-block:: python
 
-    >>> class LonelyObject(object):
+    >>> class LonelyObject:
     ...     def __diff__(self, other):
     ...         return "{} is not like {}".format(self, other)
     ...
