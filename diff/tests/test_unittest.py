@@ -17,7 +17,7 @@ class TestTestCase(diff.unittest.TestCase, TestCase):
         self.assertFails(1, 2, expected="1 != 2")
 
     def test_assertEqual_custom(self):
-        class SillyObject(object):
+        class SillyObject:
             def __diff__(self, other):
                 return Constant(explanation="Hahaha no.")
 
