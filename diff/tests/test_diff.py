@@ -10,21 +10,26 @@ class TestDiff:
         class Something:
             def __diff__(self, other):
                 return diff.Constant(explanation="nope")
+
         assert diff.diff(Something(), 12).explain() == "nope"
 
     def test_coerced_diff(self):
         class Something:
             def __diff__(self, other):
                 return "something is not " + repr(other)
+
         assert diff.diff(Something(), 12).explain() == "something is not 12"
 
     def test_str(self):
-        assert diff.diff("foo", "foobar").explain() == dedent(
-            """
+        assert (
+            diff.diff("foo", "foobar").explain()
+            == dedent(
+                """
             - foo
             + foobar
             """,
-        ).strip("\n")
+            ).strip("\n")
+        )
 
     def test_equal_returns_none(self):
         one = object()
