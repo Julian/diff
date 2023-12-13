@@ -19,7 +19,6 @@ class Difference(zope.interface.Interface):
 @zope.interface.implementer(Difference)
 @attr.s
 class Constant:
-
     _explanation = attr.ib()
 
     def explain(self):
