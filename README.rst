@@ -27,7 +27,7 @@ diff
 
     >>> class LonelyObject:
     ...     def __diff__(self, other):
-    ...         return "{} is not like {}".format(self, other)
+    ...         return f"{self} is not like {other}"
     ...
     ...     def __repr__(self):
     ...         return "<LonelyObject>"
