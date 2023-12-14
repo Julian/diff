@@ -3,23 +3,28 @@ Unittest integration.
 
 """
 
-from unittest import TestCase
+from typing import Any
+from unittest import TestCase as _UnittestTestCase
 
 from diff import diff
 
 
-class TestCase(TestCase):
+class TestCase(_UnittestTestCase):
     """
     A `unittest.TestCase` which shows failure diff messages using this library.
     """
 
-    def assertEqual(self, one, two, *args, **kwargs):
+    def assertEqual(self, first: Any, second: Any, *args: Any, **kwargs: Any):
         """
         Compare the two objects showing a diff if they're unexpectedly unequal.
         """
         try:
-            super().assertEqual(one, two, *args, **kwargs)
+            super().assertEqual(first, second, *args, **kwargs)
         except self.failureException:
             if "msg" in kwargs:
                 raise
-            self.fail(diff(one, two).explain())
+            difference = diff(first, second)
+            assert (  # noqa: S101
+                difference is not None
+            ), "This shouldn't happen! assertEqual failed but these are equal"
+            self.fail(difference.explain())

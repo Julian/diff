@@ -1,20 +1,23 @@
 from __future__ import annotations
 
 from difflib import ndiff
-from typing import Any, Protocol, runtime_checkable
+from typing import Protocol, TypeVar, runtime_checkable
 
 from attrs import field, frozen
+
+T, U = TypeVar("T"), TypeVar("U")
+T_co, U_co = TypeVar("T_co", covariant=True), TypeVar("U_co", covariant=True)
 
 
 @runtime_checkable
 class Diffable(Protocol):
-    def __diff__(self, other: Any) -> Difference:
+    def __diff__(self: T, other: U) -> Difference[T, U]:
         ...
 
 
 @runtime_checkable
-class Difference(Protocol):
-    def explain() -> str:
+class Difference(Protocol[T_co, U_co]):
+    def explain(self) -> str:
         """
         Explain this difference.
 
@@ -22,28 +25,25 @@ class Difference(Protocol):
 
             a representation of the difference
         """
+        ...
 
 
 @frozen
 class Constant:
     _explanation: str = field(alias="explanation")
 
-    def explain(self):
+    def explain(self) -> str:
         return self._explanation
 
 
-def _no_specific_diff(one):
-    return lambda two: Constant(f"{one!r} != {two!r}")
-
-
-def diff(one, two) -> Difference:
+def diff(one: T, two: U) -> Difference[T, U] | None:
     if one == two:
         return
 
-    match one:
-        case Diffable():
+    match (one, two):
+        case Diffable(), _:
             diff = one.__diff__(two)
-        case str():
+        case str(), str():
             diff = "\n".join(ndiff(one.splitlines(), two.splitlines()))
         case _:
             return Constant(f"{one!r} != {two!r}")
