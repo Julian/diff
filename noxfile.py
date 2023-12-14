@@ -9,7 +9,7 @@ PYPROJECT = ROOT / "pyproject.toml"
 PACKAGE = ROOT / "diff"
 
 
-SUPPORTED = ["3.10", "3.11", "3.12", "pypy3.10"]
+SUPPORTED = ["3.10", "3.11", "3.12"]
 LATEST = "3.12"
 
 nox.options.sessions = []
