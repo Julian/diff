@@ -30,8 +30,7 @@ classifiers = [
 ]
 dynamic = ["version"]
 dependencies = [
-  "attrs>=22.2.0",
-  "zope.interface",
+  "attrs>=23.1.0",
 ]
 
 [project.urls]

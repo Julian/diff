@@ -1,25 +1,32 @@
+from __future__ import annotations
+
 from difflib import ndiff
+from typing import Any, Protocol, runtime_checkable
 
-import attr
-import zope.interface.registry
+from attrs import field, frozen
 
 
-class Difference(zope.interface.Interface):
-    def explain():
+@runtime_checkable
+class Diffable(Protocol):
+    def __diff__(self, other: Any) -> Difference:
+        ...
+
+
+@runtime_checkable
+class Difference(Protocol):
+    def explain() -> str:
         """
         Explain this difference.
 
         Returns:
 
-            str: a representation of the difference
-
+            a representation of the difference
         """
 
 
-@zope.interface.implementer(Difference)
-@attr.s
+@frozen
 class Constant:
-    _explanation = attr.ib()
+    _explanation: str = field(alias="explanation")
 
     def explain(self):
         return self._explanation
@@ -29,27 +36,18 @@ def _no_specific_diff(one):
     return lambda two: Constant(f"{one!r} != {two!r}")
 
 
-def diff(one, two):
+def diff(one, two) -> Difference:
     if one == two:
         return
 
-    differ = getattr(one, "__diff__", None)
-    if differ is None:
-        differ = _registry.queryAdapter(one, Difference)
-    difference = differ(two)
-    return Difference(difference, Constant(explanation=difference))
+    match one:
+        case Diffable():
+            diff = one.__diff__(two)
+        case str():
+            diff = "\n".join(ndiff(one.splitlines(), two.splitlines()))
+        case _:
+            return Constant(f"{one!r} != {two!r}")
 
-
-_registry = zope.interface.registry.Components()
-_registry.registerAdapter(
-    lambda value: lambda other: "\n".join(
-        ndiff(value.splitlines(), other.splitlines()),
-    ),
-    [str],
-    Difference,
-)
-_registry.registerAdapter(
-    _no_specific_diff,
-    [None],
-    Difference,
-)
+    if isinstance(diff, Difference):
+        return diff
+    return Constant(explanation=diff)
