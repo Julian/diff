@@ -84,7 +84,7 @@ def style(session):
     session.run("ruff", "check", ROOT, __file__)
 
 
-@session(default=False)  # FIXME: It fails.
+@session()
 def typing(session):
     """
     Check static typing.
