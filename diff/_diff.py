@@ -1,22 +1,11 @@
-from __future__ import annotations
-
 from difflib import ndiff
-from typing import Protocol, TypeVar, runtime_checkable
+from typing import Protocol, TypeVar, overload, runtime_checkable
 
 from attrs import field, frozen
 
-T, U = TypeVar("T"), TypeVar("U")
-T_co, U_co = TypeVar("T_co", covariant=True), TypeVar("U_co", covariant=True)
-
 
 @runtime_checkable
-class Diffable(Protocol):
-    def __diff__(self: T, other: U) -> Difference[T, U]:
-        ...
-
-
-@runtime_checkable
-class Difference(Protocol[T_co, U_co]):
+class Difference(Protocol):
     def explain(self) -> str:
         """
         Explain this difference.
@@ -28,6 +17,15 @@ class Difference(Protocol[T_co, U_co]):
         ...
 
 
+D_co = TypeVar("D_co", bound=Difference, covariant=True)
+
+
+@runtime_checkable
+class Diffable(Protocol[D_co]):
+    def __diff__(self, other: object) -> D_co:
+        ...
+
+
 @frozen
 class Constant:
     _explanation: str = field(alias="explanation")
@@ -36,18 +34,29 @@ class Constant:
         return self._explanation
 
 
-def diff(one: T, two: U) -> Difference[T, U] | None:
+@overload
+def diff(one: Diffable[D_co], two: object) -> D_co | None:
+    ...
+
+
+@overload
+def diff(one: str, two: str) -> Difference | None:
+    ...
+
+
+# I don't understand why repeating the annotation is needed here, but otherwise
+# pyright says it doesn't know the return type. Overall the docs for overload
+# also seem poor.
+def diff(one: Diffable[D_co] | str, two: ...) -> ...:
     if one == two:
         return
 
     match (one, two):
         case Diffable(), _:
-            diff = one.__diff__(two)
+            return one.__diff__(two)
         case str(), str():
-            diff = "\n".join(ndiff(one.splitlines(), two.splitlines()))
+            result = "\n".join(ndiff(one.splitlines(), two.splitlines()))
         case _:
-            return Constant(f"{one!r} != {two!r}")
+            result = f"{one!r} != {two!r}"
 
-    if isinstance(diff, Difference):
-        return diff
-    return Constant(explanation=diff)
+    return Constant(explanation=result)

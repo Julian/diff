@@ -10,7 +10,7 @@ PACKAGE = ROOT / "diff"
 
 
 SUPPORTED = ["3.10", "3.11", "3.12"]
-LATEST = "3.12"
+LATEST = SUPPORTED[-1]
 
 nox.options.sessions = []
 

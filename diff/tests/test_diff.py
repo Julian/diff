@@ -11,13 +11,6 @@ class TestDiff:
 
         assert diff(Something(), 12).explain() == "nope"
 
-    def test_coerced_diff(self):
-        class Something:
-            def __diff__(self, other):
-                return "something is not " + repr(other)
-
-        assert diff(Something(), 12).explain() == "something is not 12"
-
     def test_str(self):
         assert (
             diff("foo", "foobar").explain()
