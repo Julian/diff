@@ -48,12 +48,14 @@ skip_covered = false
 branch = true
 source = ["diff"]
 dynamic_context = "test_function"
+omit = ["diff/tests/typing/*"]
 
 [tool.coverage.report]
 exclude_also = [
   "if TYPE_CHECKING:",
   "\\s*\\.\\.\\.\\s*",
 ]
+fail_under = 100
 show_missing = true
 skip_covered = true
 
