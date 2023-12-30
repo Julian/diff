@@ -14,3 +14,12 @@ class Something:
 
 
 difference: ConcreteDifference | None = diff(Something(), Something())
+
+
+class PartiallyDiffable:
+    def __diff__(self, other: PartiallyDiffable) -> ConcreteDifference:
+        return ConcreteDifference()
+
+
+partially = PartiallyDiffable()
+difference: ConcreteDifference | None = diff(partially, partially)

@@ -1,5 +1,5 @@
 from difflib import ndiff
-from typing import Protocol, TypeVar, overload, runtime_checkable
+from typing import Any, Protocol, TypeVar, overload, runtime_checkable
 
 from attrs import field, frozen
 
@@ -22,7 +22,7 @@ D_co = TypeVar("D_co", bound=Difference, covariant=True)
 
 @runtime_checkable
 class Diffable(Protocol[D_co]):
-    def __diff__(self, other: object) -> D_co:
+    def __diff__(self, other: Any) -> D_co:
         ...
 
 
@@ -35,7 +35,7 @@ class Constant:
 
 
 @overload
-def diff(one: Diffable[D_co], two: object) -> D_co | None:
+def diff(one: Diffable[D_co], two: Any) -> D_co | None:
     ...
 
 
