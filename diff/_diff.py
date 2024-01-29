@@ -22,8 +22,7 @@ D_co = TypeVar("D_co", bound=Difference, covariant=True)
 
 @runtime_checkable
 class Diffable(Protocol[D_co]):
-    def __diff__(self, other: Any) -> D_co:
-        ...
+    def __diff__(self, other: Any) -> D_co: ...
 
 
 @frozen
@@ -35,13 +34,11 @@ class Constant:
 
 
 @overload
-def diff(one: Diffable[D_co], two: Any) -> D_co | None:
-    ...
+def diff(one: Diffable[D_co], two: Any) -> D_co | None: ...
 
 
 @overload
-def diff(one: str, two: str) -> Difference | None:
-    ...
+def diff(one: str, two: str) -> Difference | None: ...
 
 
 # I don't understand why repeating the annotation is needed here, but otherwise
