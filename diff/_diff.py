@@ -13,6 +13,7 @@ class Difference(Protocol):
         Returns:
 
             a representation of the difference
+
         """
         ...
 
