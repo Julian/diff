@@ -39,7 +39,7 @@ def strings(
     differ: Differ,
     one: Any,
     two: Any,
-) -> Difference | None | NotImplementedType:
+) -> Difference | NotImplementedType | None:
     """
     Diff two strings, line by line if there is more than one of them.
 
@@ -68,7 +68,7 @@ def mappings(
     differ: Differ,
     one: Any,
     two: Any,
-) -> Difference | None | NotImplementedType:
+) -> Difference | NotImplementedType | None:
     """
     Diff two mappings key by key, recursing into their values.
     """
@@ -101,7 +101,7 @@ def sets(
     differ: Differ,
     one: Any,
     two: Any,
-) -> Difference | None | NotImplementedType:
+) -> Difference | NotImplementedType | None:
     """
     Diff two unordered collections by what each has to itself.
     """
@@ -117,7 +117,7 @@ def sequences(
     differ: Differ,
     one: Any,
     two: Any,
-) -> Difference | None | NotImplementedType:
+) -> Difference | NotImplementedType | None:
     """
     Diff two sequences index by index, recursing into their elements.
 
@@ -162,7 +162,7 @@ def fields(
     differ: Differ,
     one: Any,
     two: Any,
-) -> Difference | None | NotImplementedType:
+) -> Difference | NotImplementedType | None:
     """
     Diff two `attrs` or `dataclasses` instances field by field.
     """

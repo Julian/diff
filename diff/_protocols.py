@@ -62,7 +62,7 @@ class Diffable[D_co: Difference](Protocol):
 
     """
 
-    def __diff__(self, other: Any) -> D_co | None | NotImplementedType: ...
+    def __diff__(self, other: Any) -> D_co | NotImplementedType | None: ...
 
 
 class Implementation(Protocol):
@@ -83,4 +83,4 @@ class Implementation(Protocol):
         differ: Differ,
         one: Any,
         two: Any,
-    ) -> Difference | None | NotImplementedType: ...
+    ) -> Difference | NotImplementedType | None: ...

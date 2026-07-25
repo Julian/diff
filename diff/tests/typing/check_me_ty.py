@@ -41,7 +41,7 @@ class MayDecline:
     def __diff__(
         self,
         other: object,
-    ) -> Constant | None | NotImplementedType:
+    ) -> Constant | NotImplementedType | None:
         return None
 
 
