@@ -24,7 +24,6 @@ class TestCase(_UnittestTestCase):
             if "msg" in kwargs:
                 raise
             difference = diff(first, second)
-            assert (  # noqa: S101
-                difference is not None
-            ), "This shouldn't happen! assertEqual failed but these are equal"
+            if difference is None:  # __eq__ and __diff__ disagree.
+                raise
             self.fail(difference.explain())
