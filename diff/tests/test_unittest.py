@@ -25,3 +25,26 @@ class TestTestCase(diff.unittest.TestCase, TestCase):
 
     def test_assertEqual_overridden_msg(self):
         self.assertFails(1, 2, msg="foo", expected="foo")
+
+    def test_assertEqual_disagreeing_eq_and_diff(self):
+        """
+        A type whose ``__eq__`` and ``__diff__`` do not agree.
+
+        There's nothing sensible to say, so the original failure stands.
+        """
+
+        class Contrarian:  # noqa: PLW1641
+            def __eq__(self, other):
+                return False
+
+            def __diff__(self, other):
+                return None
+
+            def __repr__(self):
+                return "<Contrarian>"
+
+        self.assertFails(
+            Contrarian(),
+            Contrarian(),
+            expected="<Contrarian> != <Contrarian>",
+        )

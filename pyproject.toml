@@ -8,7 +8,7 @@ source = "vcs"
 [project]
 name = "diff"
 description = "You diff objects, you find out why they ain't the same."
-requires-python = ">=3.10"
+requires-python = ">=3.13"
 readme = "README.rst"
 license = "MIT"
 license-files = ["COPYING"]
@@ -21,10 +21,8 @@ classifiers = [
   "Intended Audience :: Developers",
   "Operating System :: OS Independent",
   "Programming Language :: Python",
-  "Programming Language :: Python :: 3.10",
-  "Programming Language :: Python :: 3.11",
-  "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
@@ -39,6 +37,9 @@ Homepage = "https://github.com/Julian/diff"
 Issues = "https://github.com/Julian/diff/issues/"
 Funding = "https://github.com/sponsors/Julian"
 Source = "https://github.com/Julian/diff"
+
+[project.entry-points.pytest11]
+diff = "diff._pytest_plugin"
 
 [tool.coverage.html]
 show_contexts = true
@@ -65,13 +66,14 @@ ignore = [
   "D001",  # one sentence per line, so max length doesn't make sense
 ]
 
-[tool.pyright]
-reportUnnecessaryTypeIgnoreComment = true
-strict = ["**/*"]
+[tool.ty.src]
 exclude = [
   "**/tests/__init__.py",
   "**/tests/test_*.py",
 ]
+
+[tool.ty.rules]
+unused-ignore-comment = "error"
 
 [tool.ruff]
 line-length = 79
@@ -91,6 +93,7 @@ ignore = [
   "B905",  # No need for explicit strict, this is simply zip's default behavior
   "C408",  # Calling dict is fine when it saves quoting the keys
   "C901",  # Not really something to focus on
+  "COM812",  # The formatter handles this, and ruff says they conflict
   "CPY",  # No need for copyright notices.
   "D105",  # It's fine to not have docstrings for magic methods.
   "D107",  # __init__ especially doesn't need a docstring

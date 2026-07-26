@@ -9,7 +9,7 @@ PYPROJECT = ROOT / "pyproject.toml"
 PACKAGE = ROOT / "diff"
 
 
-SUPPORTED = ["3.10", "3.11", "3.12", "3.13"]
+SUPPORTED = ["3.13", "3.14"]
 LATEST = SUPPORTED[-1]
 
 nox.options.default_venv_backend = "uv|virtualenv"
@@ -30,7 +30,7 @@ def tests(session):
     """
     Run the test suite with a corresponding Python version.
     """
-    session.install("pytest", ROOT)
+    session.install("pytest", "-e", ROOT)
 
     if session.posargs and session.posargs[0] == "coverage":
         if len(session.posargs) > 1 and session.posargs[1] == "github":
@@ -87,5 +87,5 @@ def typing(session):
     """
     Check static typing.
     """
-    session.install("pyright", ROOT)
-    session.run("pyright", *session.posargs, PACKAGE)
+    session.install("pytest", "ty", ROOT)
+    session.run("ty", "check", *session.posargs, PACKAGE)
